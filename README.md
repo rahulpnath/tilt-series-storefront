@@ -10,10 +10,41 @@ the right set of repos at the right tag:
 ```sh
 git clone https://github.com/rahulpnath/tilt-series
 cd tilt-series
-./bootstrap.sh v3-start
+./bootstrap.sh v3-end
 ```
 
-## At `v3-start`
+## At `v3-end`
+
+It lists products from `catalog-api` and places orders through `orders-api`,
+and it reaches both at **host addresses**:
+
+```yaml
+VITE_CATALOG_URL: "http://localhost:5101"
+VITE_ORDERS_URL:  "http://localhost:5102"
+```
+
+### Why this project is not on `shopnet`
+
+Catalog and Orders share an external network so they can call each other by
+service name. This project deliberately does not join it, because it would gain
+nothing.
+
+The `fetch` calls in `App.jsx` do not run in this container. They run in **your
+browser**, which is not a container, is not on any Docker network, and has never
+heard of Docker's DNS. `http://catalog-api:5101` resolves between containers and
+is meaningless there — so the browser gets host addresses, and those work
+because both APIs publish a port.
+
+That's the whole distinction Video 3 turns on: `orders-api` → `catalog-api` is a
+Docker DNS problem, and storefront → `catalog-api` is a *"you are not in Docker"*
+problem. Same-looking error, different fixes.
+
+A wide-open dev CORS policy in both APIs is what stops the browser rejecting the
+cross-origin calls. Video 5 removes the need for it.
+
+---
+
+## Earlier: `v3-start` — pointed at names the browser can't resolve
 
 The storefront gets its own compose file, and is pointed at the two APIs for the
 first time.

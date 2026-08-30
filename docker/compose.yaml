@@ -1,5 +1,5 @@
-# Storefront: a third repo, a third compose file, a third project. The URLs below
-# name Docker services, which your browser cannot resolve — wrong on purpose.
+# Storefront: a third repo, a third compose file, a third project. It does not
+# join `shopnet` — the fetches below run in your browser, not in a container.
 
 name: shop-storefront
 
@@ -12,8 +12,9 @@ services:
     ports:
       - "5173:5173"
     environment:
-      VITE_CATALOG_URL: "http://catalog-api:5101"
-      VITE_ORDERS_URL: "http://orders-api:5102"
+      # Host addresses, because the browser resolves these, not Docker.
+      VITE_CATALOG_URL: "http://localhost:5101"
+      VITE_ORDERS_URL: "http://localhost:5102"
     volumes:
       # Only the code you edit. node_modules and the config stay in the image.
       - ../src/src:/app/src

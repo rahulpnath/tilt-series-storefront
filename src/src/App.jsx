@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
-// Where the browser looks for the two APIs, set by compose.yaml. These are
-// Docker service names, which your browser has never heard of.
+// Where the browser looks for the two APIs, set by compose.yaml. Host addresses
+// and published ports, because this code runs in your browser.
 const CATALOG_URL = import.meta.env.VITE_CATALOG_URL
 const ORDERS_URL = import.meta.env.VITE_ORDERS_URL
 
