@@ -10,10 +10,40 @@ the right set of repos at the right tag:
 ```sh
 git clone https://github.com/rahulpnath/tilt-series
 cd tilt-series
-./bootstrap.sh v1.2-end
+./bootstrap.sh v3-start
 ```
 
-## At `v1.2-end`
+## At `v3-start`
+
+The storefront gets its own compose file, and is pointed at the two APIs for the
+first time.
+
+```sh
+docker compose -f docker/compose.yaml up
+# http://localhost:5173
+```
+
+It lists products from `catalog-api` and places orders through `orders-api` —
+or it would, if it could reach either. Open it and every call fails:
+
+```
+Could not reach catalog-api at http://catalog-api:5101 — Failed to fetch
+```
+
+### Why, and why it's a different failure to the Orders one
+
+`orders-api` can't reach `catalog-api` because they're on different Docker
+networks. This is not that.
+
+This code runs in **your browser**. Your browser is not a container, is not on
+any Docker network, and has never heard of Docker's DNS. `http://catalog-api:5101`
+is a name only containers can resolve, so the fetch dies before it leaves your
+machine. Video 3 is where both failures get explained and fixed — they need
+different fixes.
+
+---
+
+## Earlier: `v1.2-end` — the container
 
 The same app, in a container, with hot reload intact.
 
@@ -61,25 +91,3 @@ HMR needs nothing else. The client works out its websocket URL from the page's
 own address, so a published port is enough — even a remapped one. That changes
 in video 5, when Caddy terminates on 443 and the browser sees a different port
 than Vite does.
-
-> **Video 2 doesn't change this repo.** `v2-start` and `v2-end` point at this
-> same commit — video 2 puts *Catalog* into a compose file, and the storefront
-> gets its own compose file in video 3. Nothing here moves in between.
-
----
-
-## Earlier: `v1.2-start`
-
-A Vite + React app, and nothing else.
-
-```sh
-cd src
-npm install
-npm run dev
-# http://localhost:5173
-```
-
-The catalogue is a hard-coded array in `src/src/App.jsx`. No API call, no
-database, no Docker. The point of this tag is that the app runs because *your*
-machine happens to have the right Node — which is the same "works on my machine"
-problem the .NET side has, and it gets solved the same way.

@@ -1,0 +1,19 @@
+# Storefront: a third repo, a third compose file, a third project. The URLs below
+# name Docker services, which your browser cannot resolve — wrong on purpose.
+
+name: shop-storefront
+
+services:
+  storefront-web:
+    build:
+      context: ..
+      dockerfile: docker/storefront-web.dev.Dockerfile
+    image: shop-storefront-web:dev
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_CATALOG_URL: "http://catalog-api:5101"
+      VITE_ORDERS_URL: "http://orders-api:5102"
+    volumes:
+      # Only the code you edit. node_modules and the config stay in the image.
+      - ../src/src:/app/src
