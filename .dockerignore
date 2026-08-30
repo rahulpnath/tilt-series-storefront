@@ -1,0 +1,7 @@
+# node_modules is the big one: it belongs to the container, not to your host.
+**/node_modules/
+**/dist/
+.git/
+.vs/
+.idea/
+.vscode/
