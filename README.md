@@ -10,10 +10,28 @@ the right set of repos at the right tag:
 ```sh
 git clone https://github.com/rahulpnath/tilt-series
 cd tilt-series
-./bootstrap.sh v3-end
+./bootstrap.sh v4-end
 ```
 
-## At `v3-end`
+## At `v4-end`
+
+A `Tiltfile`, and nothing else. `compose.yaml` is untouched.
+
+```sh
+tilt up          # from this folder — the Storefront on its own
+```
+
+One resource, and Vite still does the reloading. `project_name` matters here for
+the same reason it does everywhere: Tilt ignores the `name:` key in the compose
+file, and without the argument every repo the workspace loads collapses into one
+project.
+
+`v4-start` did not change this repo — its tag points at the same commit as
+`v3-end`.
+
+---
+
+## Earlier: `v3-end`
 
 It lists products from `catalog-api` and places orders through `orders-api`,
 and it reaches both at **host addresses**:
