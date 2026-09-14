@@ -8,12 +8,16 @@ const ORDERS_URL = import.meta.env.VITE_ORDERS_URL
 export default function App() {
   const [products, setProducts] = useState([])
   const [status, setStatus] = useState('')
+  const [failed, setFailed] = useState(false)
 
   useEffect(() => {
     fetch(`${CATALOG_URL}/products`)
       .then((r) => r.json())
       .then(setProducts)
-      .catch((e) => setStatus(`Could not load products from ${CATALOG_URL} — ${e.message}`))
+      .catch((e) => {
+        setFailed(true)
+        setStatus(`Could not load products from ${CATALOG_URL} — ${e.message}`)
+      })
   }, [])
 
   const order = async (product) => {
@@ -24,8 +28,10 @@ export default function App() {
         body: JSON.stringify({ productId: product.id, quantity: 1 }),
       })
       const placed = await r.json()
+      setFailed(false)
       setStatus(`Order #${placed.id} placed — ${placed.productName}`)
     } catch (e) {
+      setFailed(true)
       setStatus(`Could not place order at ${ORDERS_URL} — ${e.message}`)
     }
   }
@@ -35,7 +41,7 @@ export default function App() {
       <header>
         <h1>Shop</h1>
         <p>Everything you need for better coffee at home.</p>
-        {status && <p className="status">{status}</p>}
+        {status && <p className={failed ? 'status status-error' : 'status'}>{status}</p>}
       </header>
 
       <ul className="products">

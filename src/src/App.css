@@ -71,3 +71,8 @@
   background: #f3f5f8;
   color: #1f2933;
 }
+
+.status-error {
+  background: #fdecec;
+  color: #b3261e;
+}
