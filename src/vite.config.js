@@ -6,5 +6,7 @@ export default defineConfig({
   server: {
     port: 5173,
     strictPort: true,
+    // Bind-mounted files don't raise change events on every host.
+    watch: { usePolling: true },
   },
 })

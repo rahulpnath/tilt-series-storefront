@@ -10,29 +10,27 @@ the right set of repos at the right tag:
 ```sh
 git clone https://github.com/rahulpnath/tilt-series
 cd tilt-series
-./bootstrap.sh v1.3-start
+./bootstrap.sh v1.3-end
 ```
 
-## At `v1.3-start`
+## At `v1.3-end`
 
-`storefront-web`, a Vite + React app listing the shop's products. The list is
-hardcoded in `src/src/App.jsx` — no API calls, no database, nothing to install
-beyond the dependencies themselves.
+The storefront runs in a **dev container**: `storefront-web.dev.Dockerfile` pins Node 24,
+installs from the lockfile, and starts Vite bound to every interface — so `-p` can reach it.
+Only `src/src` is bind-mounted; `node_modules` and the config stay in the image, so nothing
+root-owned lands in your tree and changing `package.json` means a rebuild.
 
 ```sh
-cd src
-npm install
-npm run dev
+docker build -f storefront-web.dev.Dockerfile -t storefront-web:dev .
+docker run --rm -it -p 5173:5173 --name storefront-web \
+  -v "$PWD/src/src:/app/src" \
+  storefront-web:dev
 ```
 
-Then open http://localhost:5173.
+Then open http://localhost:5173 and edit `src/src/App.jsx` — HMR works through the mount.
+`vite.config.js` sets `server.watch.usePolling`, because bind-mounted files don't raise
+change events on every host.
 
-**No Docker at this tag.** That arrives in video 1.3, which turns this into a
-development container with hot reload working through it.
+The product list is still hardcoded; no API calls yet.
 
-**Prerequisites:** Node 24 — pinned in `src/.nvmrc`, so `nvm use` or `fnm use`
-puts you on it if you already have it.
-
-Which is the point the next video opens on: that file records what this app
-needs, but it can't install it, it does nothing for a teammate on a different
-version manager, and the next project you clone will want something else.
+**Prerequisites:** Docker only. Node runs in the container.
