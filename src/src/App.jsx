@@ -41,7 +41,7 @@ export default function App() {
       <header>
         <h1>Shop</h1>
         <p>Everything you need for better coffee at home.</p>
-        {status && <p className={failed ? 'status status-error' : 'status'}>{status}</p>}
+        {status && <p className={failed ? 'status status-error' : 'status status-ok'}>{status}</p>}
       </header>
 
       <ul className="products">

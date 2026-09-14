@@ -72,6 +72,11 @@
   color: #1f2933;
 }
 
+.status-ok {
+  background: #e8f5e9;
+  color: #1b5e20;
+}
+
 .status-error {
   background: #fdecec;
   color: #b3261e;
