@@ -63,3 +63,11 @@
 .product button:hover {
   background: #1a5fd0;
 }
+
+.status {
+  margin-top: 1rem;
+  padding: 0.6rem 0.9rem;
+  border-radius: 0.5rem;
+  background: #f3f5f8;
+  color: #1f2933;
+}

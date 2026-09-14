@@ -1,0 +1,14 @@
+name: shop-storefront
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: storefront-web.dev.Dockerfile
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_CATALOG_URL: "http://localhost:5101"
+      VITE_ORDERS_URL: "http://localhost:5102"
+    volumes:
+      - ./src/src:/app/src

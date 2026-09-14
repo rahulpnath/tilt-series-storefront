@@ -10,27 +10,44 @@ the right set of repos at the right tag:
 ```sh
 git clone https://github.com/rahulpnath/tilt-series
 cd tilt-series
-./bootstrap.sh v1.3-end
+./bootstrap.sh v3-start
 ```
 
-## At `v1.3-end`
+## At `v3-start`
 
-The storefront runs in a **dev container**: `storefront-web.dev.Dockerfile` pins Node 24,
-installs from the lockfile, and starts Vite bound to every interface — so `-p` can reach it.
-Only `src/src` is bind-mounted; `node_modules` and the config stay in the image, so nothing
-root-owned lands in your tree and changing `package.json` means a rebuild.
+The dev container from `v1.3-end`, now with a **`compose.yaml`** — the same shape as the other
+two repos — and real API calls: `App.jsx` loads the products from Catalog and places orders
+with Orders.
+
+```yaml
+VITE_CATALOG_URL: "http://localhost:5101"
+VITE_ORDERS_URL: "http://localhost:5102"
+```
+
+Those are `localhost`, not container names, and this service is **not** on `shopnet`. The
+`fetch` calls run in your browser, on your machine — outside every Docker network — so the
+only way in is a published port. Video 3 makes that distinction, and deals with what the
+browser says when it first tries.
+
+### Running it
+
+With infra, Catalog and Orders up (see the workspace README):
 
 ```sh
-docker build -f storefront-web.dev.Dockerfile -t storefront-web:dev .
-docker run --rm -it -p 5173:5173 --name storefront-web \
-  -v "$PWD/src/src:/app/src" \
-  storefront-web:dev
+docker compose up
 ```
 
-Then open http://localhost:5173 and edit `src/src/App.jsx` — HMR works through the mount.
-`vite.config.js` sets `server.watch.usePolling`, because bind-mounted files don't raise
-change events on every host.
+Then open http://localhost:5173. Edits to `src/src` hot reload through the bind mount.
 
-The product list is still hardcoded; no API calls yet.
+```
+Shop.Storefront/
+├── compose.yaml                  # web on :5173; the two API URLs
+├── storefront-web.dev.Dockerfile # node:24, npm ci, Vite bound to every interface
+├── .dockerignore
+└── src/
+    ├── vite.config.js            # port, strictPort, usePolling
+    └── src/                      # the only folder mounted into the container
+        └── App.jsx               # fetches /products, POSTs /orders
+```
 
-**Prerequisites:** Docker only. Node runs in the container.
+**Prerequisites:** Docker only.
