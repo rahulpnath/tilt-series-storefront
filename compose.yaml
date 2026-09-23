@@ -8,7 +8,17 @@ services:
     ports:
       - "5173:5173"
     environment:
-      VITE_CATALOG_URL: "http://localhost:5101"
-      VITE_ORDERS_URL: "http://localhost:5102"
+      VITE_CATALOG_URL: "https://catalog.localhost"
+      VITE_ORDERS_URL: "https://orders.localhost"
     volumes:
       - ./src/src:/app/src
+    networks:
+      default:
+      shopnet:
+        aliases:
+          - storefront-web
+
+# Owned by the workspace's infra project; Caddy reaches this app through it.
+networks:
+  shopnet:
+    external: true
