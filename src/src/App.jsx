@@ -29,7 +29,7 @@ export default function App() {
       })
       const placed = await r.json()
       setFailed(false)
-      setStatus(`Order #${placed.id} placed — ${placed.productName}`)
+      setStatus(`Order #${placed.id} placed — ${placed.productName} at $${placed.unitPrice.toFixed(2)}`)
     } catch (e) {
       setFailed(true)
       setStatus(`Could not place order at ${ORDERS_URL} — ${e.message}`)
@@ -48,7 +48,9 @@ export default function App() {
         {products.map((product) => (
           <li key={product.id} className="product">
             <h2>{product.name}</h2>
-            <p className="price">${product.price.toFixed(2)}</p>
+            <p className="price">
+              ${(product.price * 0.9).toFixed(2)} <s>${product.price.toFixed(2)}</s> 10% off
+            </p>
             <button type="button" onClick={() => order(product)}>Order</button>
           </li>
         ))}
