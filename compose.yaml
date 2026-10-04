@@ -3,13 +3,13 @@ name: shop-storefront
 services:
   storefront-web:
     build:
-      context: ${STOREFRONT_DIR:-.}
+      context: .
       dockerfile: storefront-web.dev.Dockerfile
     environment:
       VITE_CATALOG_URL: "https://catalog.localhost"
       VITE_ORDERS_URL: "https://orders.localhost"
     volumes:
-      - ${STOREFRONT_DIR:-.}/src/src:/app/src
+      - ./src/src:/app/src
     networks:
       default:
       shopnet:
