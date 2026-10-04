@@ -6,15 +6,15 @@ services:
       context: .
       dockerfile: storefront-web.dev.Dockerfile
     environment:
-      VITE_CATALOG_URL: "https://catalog.localhost"
-      VITE_ORDERS_URL: "https://orders.localhost"
+      VITE_CATALOG_URL: "https://catalog-${FOLDER:-main}.localhost"
+      VITE_ORDERS_URL: "https://orders-${FOLDER:-main}.localhost"
     volumes:
       - ./src/src:/app/src
     networks:
       default:
       shopnet:
         aliases:
-          - storefront-web
+          - storefront-web-${FOLDER:-main}
 
 # Caddy's network; it reaches this app by its alias.
 networks:
