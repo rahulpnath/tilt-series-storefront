@@ -1,3 +1,3 @@
 docker_compose('compose.yaml', project_name='shop-storefront')
 
-dc_resource('web', new_name='storefront-web', labels=['storefront'], links=['https://storefront.localhost'])
+dc_resource('storefront-web', labels=['storefront'], links=['https://storefront.localhost'])
