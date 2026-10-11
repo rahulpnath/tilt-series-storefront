@@ -10,10 +10,33 @@ the right set of repos at the right tag:
 ```sh
 git clone https://github.com/rahulpnath/tilt-series
 cd tilt-series
-./bootstrap.sh v5-end
+./bootstrap.sh v6-end
 ```
 
-## At `v5-end`
+## At `v6-end`
+
+Two videos changed this repo.
+
+**Docker Compose Include** (`v5.2-end`) — the service is `storefront-web`, so the workspace can
+`include` this file into one compose project with the other repos. The `Tiltfile` lost
+`docker_compose()` and `new_name=`: the workspace loads this compose file through its `include`,
+and this `Tiltfile` keeps only the label and the link.
+
+**Parallel Worktree Environments** (`v6-end`) — the `shopnet` alias is
+`storefront-web-${FOLDER:-main}`, the API addresses are `https://catalog-${FOLDER:-main}.localhost`
+and `https://orders-${FOLDER:-main}.localhost`, and the Tilt link is
+`https://storefront-<folder>.localhost`. `FOLDER` is the workspace folder being run, passed on by
+the workspace `Tiltfile`; it falls back to `main`. So each folder's Storefront calls its own
+folder's APIs.
+
+The **`feature-pricing`** branch is the series' example feature: it shows the 10%-off price with
+the old one struck through. Check it out as a worktree under the workspace's `feature-pricing/`
+folder (workspace README).
+
+This repo no longer runs on its own: its database and message broker come from the workspace's
+infra, inside each folder's project. Run it from the workspace (`tilt up`, or `tilt up <folder>`).
+
+## Earlier: `v5-end`
 
 Behind **Caddy**. Three changes in `compose.yaml`, one in the `Tiltfile`, nothing in `src/`.
 
